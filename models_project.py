@@ -1,7 +1,8 @@
-import time
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
+from torchvision import models
+import torchvision.models as M
 
 class ConvNet(nn.Module):
     def __init__(self, mode):
@@ -127,4 +128,93 @@ class ConvNet(nn.Module):
         X = self.dropout(X)               # Apply dropout
         X = self.fc3_m5(X)                # Apply third fully connected layer
         return X
+
     
+class PreTrainedModels(nn.Module):
+    def __init__(self, model_name, pretrained):
+        super(PreTrainedModels, self).__init__()
+        self.pretrained = pretrained
+        self.model_name = model_name
+        if model_name in ['AlexNet', 'alexnet']:
+            self.model = self.AlexNet()
+        elif model_name in ['ResNet', 'resnet']:
+            self.model = self.ResNet()
+        elif model_name in ['VGG', 'vgg']:
+            self.model = self.VGG()
+        elif model_name in ['SqueezeNet', 'squeezenet']:
+            self.model = self.SqueezeNet()
+        elif model_name in ['DenseNet', 'densenet']:
+            self.model = self.DenseNet()
+        elif model_name in ['GoogleNet', 'googlenet']:
+            self.model = self.GoogleNet()
+        elif model_name in ['ViT', 'vit']:
+            self.model = self.ViT()
+        else:
+            print("Invalid model name ", model_name, "selected. Select from ['AlexNet', 'ResNet', 'VGG', 'SqueezeNet', 'DenseNet', 'GoogleNet', 'ViT']")
+            exit(0)
+
+    def forward(self, x):
+        return self.model(x)
+
+    # AlexNet model with configurable weights and classes
+    def AlexNet(self, pretrained=True):
+        # Load the AlexNet model with or without pretrained weights
+        weights = M.AlexNet_Weights.IMAGENET1K_V1 if pretrained else None
+        model = models.alexnet(weights=weights)
+        # Modify the classifier to match the number of classes
+        model.classifier[6] = nn.Linear(4096, 4)
+        return model
+
+    # ResNet18 model with configurable weights and classes
+    def ResNet(self, pretrained=True):
+        # Load the ResNet18 model with or without pretrained weights
+        weights = M.ResNet18_Weights.IMAGENET1K_V1 if pretrained else None
+        model = models.resnet18(weights=weights)
+        # Modify the classifier to match the number of classes
+        model.fc = nn.Linear(model.fc.in_features, 4)
+        return model
+    
+    # VGG16 model with configurable weights and classes
+    def VGG(self, pretrained=True):
+        # Load the VGG16 model with or without pretrained weights
+        weights = M.VGG16_Weights.IMAGENET1K_V1 if pretrained else None
+        model = models.vgg16(weights=weights)
+        # Modify the classifier to match the number of classes
+        model.classifier[6] = nn.Linear(4096, 4)
+        return model
+    
+    # SqueezeNet model with configurable weights and classes
+    def SqueezeNet(self, pretrained=True):
+        # Load the SqueezeNet model with or without pretrained weights
+        weights = M.SqueezeNet1_0_Weights.IMAGENET1K_V1 if pretrained else None
+        model = models.squeezenet1_0(weights=weights)
+        # Modify the classifier to match the number of classes
+        model.classifier[1] = nn.Conv2d(512, 4, kernel_size=(1,1), stride=(1,1))
+        return model
+
+    # DenseNet model with configurable weights and classes
+    def DenseNet(self, pretrained=True):
+        # Load the DenseNet model with or without pretrained weights
+        weights = M.DenseNet121_Weights.IMAGENET1K_V1 if pretrained else None
+        model = models.densenet121(weights=weights)
+        # Modify the classifier to match the number of classes
+        model.classifier = nn.Linear(model.classifier.in_features, 4)
+        return model
+    
+    # GoogleNet model with configurable weights and classes
+    def GoogleNet(self, pretrained=True):
+        # Load the GoogleNet model with or without pretrained weights
+        weights = M.GoogLeNet_Weights.IMAGENET1K_V1 if pretrained else None
+        model = models.googlenet(weights=weights)
+        # Modify the classifier to match the number of classes
+        model.fc = nn.Linear(model.fc.in_features, 4)
+        return model
+    
+    # Vision Transformer model with configurable weights and classes
+    def ViT(self, pretrained=True):
+        # Load the Vision Transformer model with or without pretrained weights
+        weights = M.ViT_B_16_Weights.IMAGENET1K_V1 if pretrained else None
+        model = models.vit_b_16(weights=weights)
+        # Modify the head to match the number of classes
+        model.heads.head = nn.Linear(model.heads.head.in_features, 4)
+        return model

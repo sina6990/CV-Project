@@ -1,0 +1,2 @@
+AlexNet / PreTrained / accuracy is 80.18
+ResNet / PreTrained / accuracy is 83.02

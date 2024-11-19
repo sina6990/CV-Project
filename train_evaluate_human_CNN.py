@@ -135,14 +135,6 @@ def run_main(FLAGS):
     #Set proper device based on cuda availability 
     device = torch.device("cuda" if use_cuda else "cpu")
     print("Torch device selected: ", device)
-
-    ''' 
-    Since I have a Mac with M2 chip, I changed this part of code.
-    For Apple GPUs, use the below code for using Metal Performance Shaders (MPS)
-    '''
-    # use_mps = torch.backends.mps.is_available()
-    # device = torch.device("mps" if use_mps else "cpu")
-    # print("Torch device selected: ", device)
     
     # Initialize the model and send to device 
     model = ConvNet(FLAGS.mode).to(device)
@@ -163,7 +155,7 @@ def run_main(FLAGS):
         ])
     
     # Load datasets for training and testing
-    dataset = ImageFolder(root='~/Sina/Project/Data/Dog/', transform=transform)
+    dataset = ImageFolder(root='~/Sina/CV-Project/Data/Human/', transform=transform)
     train_size = int(0.8 * len(dataset))
     test_size = len(dataset) - train_size
     train_dataset, test_dataset = torch.utils.data.random_split(dataset, [train_size, test_size])
@@ -194,20 +186,22 @@ def run_main(FLAGS):
     
     
 if __name__ == '__main__':
-    # Set parameters for Sparse Autoencoder
-    parser = argparse.ArgumentParser('CNN Exercise.')
+    # Set parameters for Models with Transfer Learning
+    parser = argparse.ArgumentParser('Models with Transfer Learning For Human Emotion Recognition')
     parser.add_argument('--mode',
                         type=int, default=1,
                         help='Select mode between 1-5.')
     parser.add_argument('--learning_rate',
-                        type=float, default=0.1,
+                        type=float, 
+                        default=0.1,
                         help='Initial learning rate.')
     parser.add_argument('--num_epochs',
                         type=int,
                         default=60,
                         help='Number of epochs to run trainer.')
     parser.add_argument('--batch_size',
-                        type=int, default=10,
+                        type=int, 
+                        default=10,
                         help='Batch size. Must divide evenly into the dataset sizes.')
     parser.add_argument('--log_dir',
                         type=str,
