@@ -9,7 +9,7 @@ from torch.utils.data import DataLoader
 from torchvision import datasets, transforms
 from torchvision.datasets import ImageFolder
 from torch.utils.tensorboard.writer import SummaryWriter
-from models_project import PreTrainedModels
+from models_project import ConvNet
 import argparse
 import numpy as np
 from tqdm import tqdm
@@ -64,10 +64,10 @@ def train(model, device, train_loader, optimizer, criterion, epoch, batch_size, 
         correct += pred.eq(target.view_as(pred)).sum().item()
         
     train_loss = float(np.mean(losses))
-    train_acc = 100. * correct / ((batch_idx+1) * batch_size)
-    
+    train_acc = correct / ((batch_idx+1) * batch_size)
     print('Train set: Average loss: {:.4f} | Accuracy: {}/{} ({:.2f}%)\n'.format(
-        train_loss, correct, (batch_idx+1) * batch_size, train_acc))
+        float(np.mean(losses)), correct, (batch_idx+1) * batch_size,
+        100. * correct / ((batch_idx+1) * batch_size)))
     
     # Log training loss and accuracy to TensorBoard
     writer.add_scalar('Loss/train', train_loss, epoch)
@@ -134,9 +134,9 @@ def run_main(FLAGS):
     #Set proper device based on cuda availability 
     device = torch.device("cuda" if use_cuda else "cpu")
     print("Torch device selected:", device)
-    
+
     # Initialize the model and send to device 
-    model = PreTrainedModels(FLAGS.model_name, FLAGS.pretrained).to(device)
+    model = ConvNet(FLAGS.mode).to(device)
 
     # Define loss function
     criterion = nn.CrossEntropyLoss()
@@ -154,7 +154,7 @@ def run_main(FLAGS):
         ])
     
     # Load datasets for training and testing
-    dataset = ImageFolder(root='~/Sina/CV-Project/Data/Human/', transform=transform)
+    dataset = ImageFolder(root='~/Sina/CV-Project/Data/Dog/', transform=transform)
     train_size = int(0.8 * len(dataset))
     test_size = len(dataset) - train_size
     train_dataset, test_dataset = torch.utils.data.random_split(dataset, [train_size, test_size])
@@ -174,7 +174,7 @@ def run_main(FLAGS):
         train_loss, train_accuracy = train(model, device, train_loader,
                                             optimizer, criterion, epoch, FLAGS.batch_size, writer)
         test_loss, test_accuracy = test(model, device, test_loader, criterion, epoch, writer)
-        print("-"*60 + "\n")
+        print("-------------------------------------------------------------\n")
         if test_accuracy > best_accuracy:
             best_accuracy = test_accuracy
     
@@ -185,27 +185,20 @@ def run_main(FLAGS):
     
     
 if __name__ == '__main__':
-    # Set parameters for Models with Transfer Learning
-    parser = argparse.ArgumentParser('Models with Transfer Learning For Human Emotion Recognition')
-    parser.add_argument('--model_name',
-                        type=str,
-                        default='AlexNet',
-                        help='Select model name from AlexNet, ResNet, VGG, SqueezeNet, DenseNet, GoogleNet, ViT')
-    parser.add_argument('--pretrained',
-                        type=bool,
-                        default=True,
-                        help='Use pretrained model or not.')
+    # Set parameters for Sparse Autoencoder
+    parser = argparse.ArgumentParser('CNN Exercise.')
+    parser.add_argument('--mode',
+                        type=int, default=1,
+                        help='Select mode between 1-5.')
     parser.add_argument('--learning_rate',
-                        type=float, 
-                        default=0.001,
+                        type=float, default=0.1,
                         help='Initial learning rate.')
     parser.add_argument('--num_epochs',
                         type=int,
                         default=60,
                         help='Number of epochs to run trainer.')
     parser.add_argument('--batch_size',
-                        type=int, 
-                        default=10,
+                        type=int, default=10,
                         help='Batch size. Must divide evenly into the dataset sizes.')
     parser.add_argument('--log_dir',
                         type=str,

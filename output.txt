@@ -1,2 +1,45 @@
+#####################
+Human Dataset
+---------------------
+Pretrained = True
+---------------------
 AlexNet / PreTrained / accuracy is 80.18
 ResNet / PreTrained / accuracy is 83.02
+VGG / PreTrained / accuracy is 84.25
+SqueezeNet / PreTrained / accuracy is 84.33
+DenseNet / PreTrained / accuracy is 84.98
+GoogleNet / PreTrained / accuracy is 84.59
+ViT / PreTrained / accuracy is 80.37
+---------------------
+Pretrained = False
+---------------------
+AlexNet / 
+ResNet /
+VGG / 
+SqueezeNet / 
+DenseNet / 
+GoogleNet / 
+ViT / 
+
+#####################
+Dog Dataset
+---------------------
+Pretrained = True
+---------------------
+AlexNet / PreTrained / 
+ResNet / PreTrained / 
+VGG / PreTrained / 
+SqueezeNet / PreTrained / 
+DenseNet / PreTrained / 
+GoogleNet / PreTrained / 
+ViT / PreTrained / 
+---------------------
+Pretrained = False
+---------------------
+AlexNet / 
+ResNet /
+VGG / 
+SqueezeNet / 
+DenseNet / 
+GoogleNet / 
+ViT / 

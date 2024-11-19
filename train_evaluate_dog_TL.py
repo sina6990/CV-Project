@@ -9,11 +9,10 @@ from torch.utils.data import DataLoader
 from torchvision import datasets, transforms
 from torchvision.datasets import ImageFolder
 from torch.utils.tensorboard.writer import SummaryWriter
-from models_project import ConvNet
+from models_project import PreTrainedModels
 import argparse
 import numpy as np
 from tqdm import tqdm
-from tensorboard import notebook
 
 def train(model, device, train_loader, optimizer, criterion, epoch, batch_size, writer):
     '''
@@ -65,10 +64,10 @@ def train(model, device, train_loader, optimizer, criterion, epoch, batch_size, 
         correct += pred.eq(target.view_as(pred)).sum().item()
         
     train_loss = float(np.mean(losses))
-    train_acc = correct / ((batch_idx+1) * batch_size)
+    train_acc = 100. * correct / ((batch_idx+1) * batch_size)
+    
     print('Train set: Average loss: {:.4f} | Accuracy: {}/{} ({:.2f}%)\n'.format(
-        float(np.mean(losses)), correct, (batch_idx+1) * batch_size,
-        100. * correct / ((batch_idx+1) * batch_size)))
+        train_loss, correct, (batch_idx+1) * batch_size, train_acc))
     
     # Log training loss and accuracy to TensorBoard
     writer.add_scalar('Loss/train', train_loss, epoch)
@@ -137,7 +136,7 @@ def run_main(FLAGS):
     print("Torch device selected:", device)
 
     # Initialize the model and send to device 
-    model = ConvNet(FLAGS.mode).to(device)
+    model = PreTrainedModels(FLAGS.model_name, FLAGS.pretrained).to(device)
 
     # Define loss function
     criterion = nn.CrossEntropyLoss()
@@ -187,19 +186,26 @@ def run_main(FLAGS):
     
 if __name__ == '__main__':
     # Set parameters for Sparse Autoencoder
-    parser = argparse.ArgumentParser('CNN Exercise.')
-    parser.add_argument('--mode',
-                        type=int, default=1,
-                        help='Select mode between 1-5.')
+    parser = argparse.ArgumentParser('Models with Transfer Learning for Dog Emotion Recognition')
+    parser.add_argument('--model_name',
+                        type=str,
+                        default='AlexNet',
+                        help='Select model name from AlexNet, ResNet, VGG, SqueezeNet, DenseNet, GoogleNet, ViT')
+    parser.add_argument('--pretrained',
+                        type=bool,
+                        default=True,
+                        help='Use pretrained model or not.')
     parser.add_argument('--learning_rate',
-                        type=float, default=0.1,
+                        type=float, 
+                        default=0.1,
                         help='Initial learning rate.')
     parser.add_argument('--num_epochs',
                         type=int,
                         default=60,
                         help='Number of epochs to run trainer.')
     parser.add_argument('--batch_size',
-                        type=int, default=10,
+                        type=int, 
+                        default=10,
                         help='Batch size. Must divide evenly into the dataset sizes.')
     parser.add_argument('--log_dir',
                         type=str,
