@@ -13,13 +13,13 @@ ViT / PreTrained / accuracy is 80.37
 ---------------------
 Pretrained = False
 ---------------------
-AlexNet / 
-ResNet /
-VGG / 
-SqueezeNet / 
-DenseNet / 
-GoogleNet / 
-ViT / 
+AlexNet / accuracy is 79.75
+ResNet / accuracy is 85.21
+VGG / accuracy is 85.21
+SqueezeNet / accuracy is 82.37
+DenseNet / accuracy is 83.90
+GoogleNet / accuracy is 84.21
+ViT / accuracy is 80.60
 
 #####################
 Dog Dataset
