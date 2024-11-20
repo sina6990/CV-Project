@@ -26,20 +26,20 @@ Dog Dataset
 ---------------------
 Pretrained = True
 ---------------------
-AlexNet / PreTrained / 
-ResNet / PreTrained / 
-VGG / PreTrained / 
-SqueezeNet / PreTrained / 
-DenseNet / PreTrained / 
-GoogleNet / PreTrained / 
-ViT / PreTrained / 
+AlexNet / PreTrained / accuracy is 82.88
+ResNet / PreTrained / accuracy is 86.12
+VGG / PreTrained / accuracy is 85.25
+SqueezeNet / PreTrained / accuracy is 82.50
+DenseNet / PreTrained / accuracy is 89.50
+GoogleNet / PreTrained / accuracy is 87.38
+ViT / PreTrained / accuracy is 78.38
 ---------------------
 Pretrained = False
 ---------------------
-AlexNet / 
-ResNet /
-VGG / 
-SqueezeNet / 
-DenseNet / 
-GoogleNet / 
-ViT / 
+AlexNet / accuracy is 80.00
+ResNet / accuracy is 86.25
+VGG / accuracy is 86.12
+SqueezeNet / accuracy is 79.88
+DenseNet / accuracy is 89.25
+GoogleNet / accuracy is 86.38
+ViT / accuracy is 73.88

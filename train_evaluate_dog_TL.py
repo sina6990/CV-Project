@@ -174,7 +174,7 @@ def run_main(FLAGS):
         train_loss, train_accuracy = train(model, device, train_loader,
                                             optimizer, criterion, epoch, FLAGS.batch_size, writer)
         test_loss, test_accuracy = test(model, device, test_loader, criterion, epoch, writer)
-        print("-------------------------------------------------------------\n")
+        print("-"*60 + "\n")
         if test_accuracy > best_accuracy:
             best_accuracy = test_accuracy
     
