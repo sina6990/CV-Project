@@ -1,6 +1,5 @@
 from __future__ import print_function
 import argparse
-import os
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
@@ -13,7 +12,6 @@ from models_project import ConvNet
 import argparse
 import numpy as np
 from tqdm import tqdm
-from tensorboard import notebook
 
 def train(model, device, train_loader, optimizer, criterion, epoch, batch_size, writer):
     '''
@@ -65,10 +63,10 @@ def train(model, device, train_loader, optimizer, criterion, epoch, batch_size, 
         correct += pred.eq(target.view_as(pred)).sum().item()
         
     train_loss = float(np.mean(losses))
-    train_acc = correct / ((batch_idx+1) * batch_size)
+    train_acc = 100. * correct / ((batch_idx+1) * batch_size)
+
     print('Train set: Average loss: {:.4f} | Accuracy: {}/{} ({:.2f}%)\n'.format(
-        float(np.mean(losses)), correct, (batch_idx+1) * batch_size,
-        100. * correct / ((batch_idx+1) * batch_size)))
+        train_loss, correct, (batch_idx+1) * batch_size, train_acc))
     
     # Log training loss and accuracy to TensorBoard
     writer.add_scalar('Loss/train', train_loss, epoch)

@@ -64,10 +64,10 @@ def train(model, device, train_loader, optimizer, criterion, epoch, batch_size, 
         correct += pred.eq(target.view_as(pred)).sum().item()
         
     train_loss = float(np.mean(losses))
-    train_acc = correct / ((batch_idx+1) * batch_size)
+    train_acc = 100. * correct / ((batch_idx+1) * batch_size)
+
     print('Train set: Average loss: {:.4f} | Accuracy: {}/{} ({:.2f}%)\n'.format(
-        float(np.mean(losses)), correct, (batch_idx+1) * batch_size,
-        100. * correct / ((batch_idx+1) * batch_size)))
+        train_loss, correct, (batch_idx+1) * batch_size, train_acc))
     
     # Log training loss and accuracy to TensorBoard
     writer.add_scalar('Loss/train', train_loss, epoch)
@@ -174,7 +174,7 @@ def run_main(FLAGS):
         train_loss, train_accuracy = train(model, device, train_loader,
                                             optimizer, criterion, epoch, FLAGS.batch_size, writer)
         test_loss, test_accuracy = test(model, device, test_loader, criterion, epoch, writer)
-        print("-------------------------------------------------------------\n")
+        print("-"*60 + "\n")
         if test_accuracy > best_accuracy:
             best_accuracy = test_accuracy
     

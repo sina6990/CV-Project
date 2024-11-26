@@ -1,6 +1,11 @@
 #####################
 Human Dataset
 ---------------------
+Foundational Models
+---------------------
+Model 1 / accuracy is 58.89
+Model 2 / accuracy is 69.38
+---------------------
 Pretrained = True
 ---------------------
 AlexNet / PreTrained / accuracy is 80.18
@@ -23,6 +28,11 @@ ViT / accuracy is 80.60
 
 #####################
 Dog Dataset
+---------------------
+Foundational Models
+---------------------
+Model 1 / accuracy is 39.38
+Model 2 / accuracy is 41.00
 ---------------------
 Pretrained = True
 ---------------------
